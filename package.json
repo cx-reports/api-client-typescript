@@ -1,0 +1,29 @@
+{
+  "name": "@cx-reports/api-client",
+  "version": "0.1.0",
+  "description": "Connect to CxReports API from your application.",
+  "type": "module",
+  "main": "v1.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cx-reports/api-client-typescript.git"
+  },
+  "keywords": [
+    "cx-reports",
+    "typescript",
+    "api-client"
+  ],
+  "author": "Codaxy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cx-reports/api-client-typescript/issues"
+  },
+  "homepage": "https://github.com/cx-reports/api-client-typescript#readme",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
