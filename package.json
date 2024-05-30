@@ -6,7 +6,7 @@
   "main": "v1.js",
   "scripts": {
     "build": "tsc",
-    "test": "test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,10 @@
   },
   "homepage": "https://github.com/cx-reports/api-client-typescript#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }

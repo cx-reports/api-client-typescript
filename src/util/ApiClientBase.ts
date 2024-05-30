@@ -1,5 +1,5 @@
 export abstract class ApiClientBase {
-  protected abstract resolveEndpointUrl(path: string, query?: any): string;
+  protected abstract resolveEndpointURL(path: string, query?: any): string;
 
   protected abstract resolveFetchOptions(
     options: Partial<RequestInit>
@@ -10,7 +10,7 @@ export abstract class ApiClientBase {
     options: Partial<RequestInit>,
     query?: any
   ): Promise<Response> {
-    let url = this.resolveEndpointUrl(endpointPath, query);
+    let url = this.resolveEndpointURL(endpointPath, query);
     let fetchOptions = this.resolveFetchOptions(options);
     let response = await fetch(url, fetchOptions);
     if (!response.ok) await this.processError(response);
