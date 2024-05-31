@@ -9,6 +9,7 @@ const jestConfig: JestConfigWithTsJest = {
       },
     ],
   },
+  modulePathIgnorePatterns: ["dist"],
 };
 
 export default jestConfig;
