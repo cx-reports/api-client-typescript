@@ -22,5 +22,21 @@ export abstract class ApiClientBase {
     return await response.json();
   }
 
+  protected async post<T>(
+    path: string,
+    options?: { query?: any; data?: any }
+  ): Promise<T> {
+    let response = await this.doFetch(
+      path,
+      {
+        method: "POST",
+        body: options?.data ? JSON.stringify(options.data) : null,
+        headers: { "Content-Type": "application/json" },
+      },
+      options?.query
+    );
+    return await response.json();
+  }
+
   protected abstract processError(response: Response): Promise<never>;
 }

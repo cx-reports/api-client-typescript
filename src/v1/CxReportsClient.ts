@@ -1,7 +1,10 @@
-import { ApiClientBase } from "../util/ApiClientBase";
-import { buildUrl } from "../util/buildUrl";
-import { CxReportsError, MissingWorkspaceIdError } from "./CxReportsError";
-import { ErrorData } from "./models/ErrorData";
+import { ApiClientBase } from "../util/ApiClientBase.js";
+import { buildUrl } from "../util/buildUrl.js";
+import { CxReportsError, MissingWorkspaceIdError } from "./CxReportsError.js";
+import { ErrorData } from "./models/ErrorData.js";
+import { Workspace } from "./models/Workspace.js";
+import { NonceToken } from "./models/NonceToken.js";
+import { TemporaryData } from "./models/TemporaryData.js";
 
 export interface CxReportsClientConfig {
   baseUrl: string;
@@ -143,5 +146,29 @@ export class CxReportsClient extends ApiClientBase {
       )}/pdf`,
       query
     );
+  }
+
+  public getWorkspaces(): Promise<Workspace[]> {
+    return this.get("workspaces");
+  }
+
+  public createNonceAuthToken(): Promise<NonceToken> {
+    return this.post("nonce-tokens");
+  }
+
+  public pushTemporaryData(
+    params: WorkspaceIdParams & {
+      content: any;
+      expires?: Date;
+    }
+  ): Promise<TemporaryData> {
+    let workspaceId = this.getWorkspaceId(params);
+
+    return this.post(`ws/${encodeURIComponent(workspaceId)}/temporary-data`, {
+      data: {
+        content: params.content,
+        expiryDate: params?.expires?.toISOString(),
+      },
+    });
   }
 }

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "rootDir": "./",
+    "paths": {
+      "@cx-reports/api-client": ["../src"]
+    }
+  },
+  "ts-node": {
+    "esm": true
+  }
+}

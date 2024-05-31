@@ -1,4 +1,4 @@
-import { buildQueryString as buildQuery } from "./buildQuery";
+import { buildQueryString as buildQuery } from "./buildQuery.js";
 
 export function buildUrl(
   baseUrl: string,

@@ -1,2 +1,2 @@
-export * from "./models/index";
-export * from "./CxReportsClient";
+export * from "./models/index.js";
+export * from "./CxReportsClient.js";

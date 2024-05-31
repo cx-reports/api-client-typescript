@@ -1,12 +1,13 @@
 {
   "name": "@cx-reports/api-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connect to CxReports API from your application.",
   "type": "module",
   "main": "v1.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "example:fetch-reports": "node --experimental-specifier-resolution=node examples/fetch-reports.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "homepage": "https://github.com/cx-reports/api-client-typescript#readme",
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "dotenv": "^16.4.5",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",
