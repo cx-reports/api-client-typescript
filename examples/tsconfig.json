@@ -4,12 +4,14 @@
     "module": "ESNext",
     "strict": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "rootDir": "./",
     "paths": {
       "@cx-reports/api-client": ["../src"]
     }
   },
   "ts-node": {
-    "esm": true
+    "esm": true,
+    "experimental-specifier-resolution": "node"
   }
 }

@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "example:fetch-reports": "node --experimental-specifier-resolution=node examples/fetch-reports.js"
+    "example:fetch-reports": "tsx examples/fetch-reports.ts",
+    "example:build-preview-url": "tsx examples/build-preview-url.ts"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.11.0",
     "typescript": "^5.4.5"
   }
 }

@@ -1,8 +1,6 @@
 import { config } from "dotenv";
 import { CxReportsClient } from "../v1.js";
 
-console.log("HELLO");
-
 config();
 
 if (!process.env.BASE_URL || !process.env.AUTH_TOKEN)
@@ -15,41 +13,23 @@ let client = new CxReportsClient({
 });
 
 try {
-  let reports = await client.getReports();
-
-  console.table(reports);
-} catch (error) {
-  console.error(error);
-}
-
-try {
-  let workspaces = await client.getWorkspaces();
-
-  console.table(workspaces);
-} catch (error) {
-  console.error(error);
-}
-
-try {
   let { nonce } = await client.createNonceAuthToken();
-  //nonce = decodeURIComponent(nonce);
-  console.log(nonce);
+  console.log("NONCE", nonce);
+
+  let { id: tmpDataId } = await client.pushTemporaryData({
+    content: { xyz: "123" },
+  });
+  console.table(tmpDataId);
 
   let previewUrl = client.getReportPreviewURL({
     reportId: 18620,
     nonce,
+    tmpDataId,
     //params: { abc: "test" },
     //data: "123",
   });
 
   console.log(previewUrl);
-} catch (error) {
-  console.error(error);
-}
-
-try {
-  let tmpData = await client.pushTemporaryData({ content: { xyz: "123" } });
-  console.table(tmpData);
 } catch (error) {
   console.error(error);
 }
