@@ -1,4 +1,4 @@
 export interface TemporaryData {
-  id: number;
+  tempDataId: number;
   expiryDate: string;
 }

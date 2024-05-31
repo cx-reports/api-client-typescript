@@ -24,7 +24,7 @@ interface ReportIdParams {
 interface ReportPreviewParams {
   params?: any;
   data?: any;
-  tmpDataId?: number;
+  tempDataId?: number;
   nonce?: string;
 }
 
@@ -112,7 +112,7 @@ export class CxReportsClient extends ApiClientBase {
       params: params.params ? JSON.stringify(params.params) : null,
       data: params.data ? JSON.stringify(params.data) : null,
       nonce: params.nonce,
-      tmpDataId: params.tmpDataId,
+      tempDataId: params.tempDataId,
     };
   }
 
@@ -122,7 +122,6 @@ export class CxReportsClient extends ApiClientBase {
     let workspaceId = this.getWorkspaceId(params);
     let reportId = this.getReportId(params);
     let query = this.encodeReportPreviewParams(params);
-
     return this.resolveEndpointURLWithApiPath(
       "/", // no api path for this endpoint
       `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(

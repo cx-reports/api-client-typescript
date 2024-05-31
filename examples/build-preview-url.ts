@@ -1,5 +1,6 @@
 import { config } from "dotenv";
-import { CxReportsClient } from "../v1.js";
+//import { CxReportsClient } from "@cx-reports/api-client"; // in a real project
+import { CxReportsClient } from "../src/v1/CxReportsClient";
 
 config();
 
@@ -16,15 +17,15 @@ try {
   let { nonce } = await client.createNonceAuthToken();
   console.log("NONCE", nonce);
 
-  let { id: tmpDataId } = await client.pushTemporaryData({
+  let { tempDataId } = await client.pushTemporaryData({
     content: { xyz: "123" },
   });
-  console.table(tmpDataId);
+  console.table(tempDataId);
 
   let previewUrl = client.getReportPreviewURL({
     reportId: 18620,
     nonce,
-    tmpDataId,
+    tempDataId,
     //params: { abc: "test" },
     //data: "123",
   });
