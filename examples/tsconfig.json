@@ -6,7 +6,7 @@
     "strict": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "rootDir": "../",
+    "rootDir": "./",
     "paths": {
       "@cx-reports/api-client": ["../src"]
     }
