@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import { CxReportsClient } from "../v1.js";
+import { CxReportsClient } from "../src/v1/CxReportsClient.js";
 
 config();
 

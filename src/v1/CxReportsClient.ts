@@ -138,11 +138,26 @@ export class CxReportsClient extends ApiClientBase {
     let reportId = this.getReportId(params);
     let query = this.encodeReportPreviewParams(params);
 
-    return this.resolveEndpointURLWithApiPath(
-      "/", // no api path for this endpoint
+    return this.resolveEndpointURL(
       `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(
         reportId
       )}/pdf`,
+      query
+    );
+  }
+
+  public async downloadPDF(
+    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams
+  ): Promise<Response> {
+    let workspaceId = this.getWorkspaceId(params);
+    let reportId = this.getReportId(params);
+    let query = this.encodeReportPreviewParams(params);
+
+    return this.doFetch(
+      `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(
+        reportId
+      )}/pdf`,
+      { method: "GET" },
       query
     );
   }

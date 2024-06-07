@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "rootDir": "./",
+    "rootDir": "../",
     "paths": {
       "@cx-reports/api-client": ["../src"]
     }

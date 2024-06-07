@@ -1,6 +1,6 @@
 {
   "name": "@cx-reports/api-client",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Connect to CxReports API from your application.",
   "type": "module",
   "main": "v1.js",
@@ -15,7 +15,8 @@
     "build": "tsc",
     "test": "jest",
     "example:fetch-reports": "tsx examples/fetch-reports.ts",
-    "example:build-preview-url": "tsx examples/build-preview-url.ts"
+    "example:build-preview-url": "tsx examples/build-preview-url.ts",
+    "example:download-pdf": "tsx examples/download-pdf.ts"
   },
   "repository": {
     "type": "git",

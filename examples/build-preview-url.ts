@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 //import { CxReportsClient } from "@cx-reports/api-client"; // in a real project
-import { CxReportsClient } from "../src/v1/CxReportsClient";
+import { CxReportsClient } from "../src/v1/CxReportsClient.js";
 
 config();
 
