@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { config } from "dotenv";
-import { CxReportsClient } from "../src/v1/CxReportsClient.js";
+import { CxReportsClient } from "@cx-reports/api-client";
 
 config();
 

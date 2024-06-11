@@ -86,6 +86,7 @@ export class CxReportsClient extends ApiClientBase {
   public getReports(
     params?: WorkspaceIdParams & {
       query?: {
+        type?: string;
         offset?: number;
         limit?: number;
       };

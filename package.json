@@ -1,6 +1,6 @@
 {
   "name": "@cx-reports/api-client",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Connect to CxReports API from your application.",
   "type": "module",
   "main": "v1.js",

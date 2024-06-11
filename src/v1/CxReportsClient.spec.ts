@@ -100,7 +100,7 @@ describe("CxReportsClient", () => {
     });
 
     expect(client.getReportPdfDownloadURL({ reportId: 1 })).toBe(
-      "http://example.com/ws/test/reports/1/pdf"
+      "http://example.com/api/v1/ws/test/reports/1/pdf"
     );
   });
 });

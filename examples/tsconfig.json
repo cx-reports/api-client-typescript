@@ -6,9 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "rootDir": "./",
+    "rootDir": "../",
     "paths": {
-      "@cx-reports/api-client": ["../src"]
+      "@cx-reports/api-client": ["../src/v1/index.ts"]
     }
   },
   "ts-node": {
