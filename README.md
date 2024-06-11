@@ -1,5 +1,7 @@
 # TypeScript API Client for CxReports
 
+![NPM Version](https://img.shields.io/npm/v/%40cx-reports%2Fapi-client)
+
 This library allows you to connect to the CxReports API from your applications.
 
 ## Installation
