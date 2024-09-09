@@ -10,6 +10,7 @@ export interface CxReportsClientConfig {
   baseUrl: string;
   authToken: string;
   defaultWorkspaceId?: string;
+  defaultTimezone?: string;
 }
 interface WorkspaceIdParams {
   workspaceId?: number;
@@ -26,6 +27,7 @@ interface ReportPreviewParams {
   data?: any;
   tempDataId?: number;
   nonce?: string;
+  timezone?: string;
 }
 
 export class CxReportsClient extends ApiClientBase {
@@ -114,6 +116,7 @@ export class CxReportsClient extends ApiClientBase {
       data: params.data ? JSON.stringify(params.data) : null,
       nonce: params.nonce,
       tempDataId: params.tempDataId,
+      timezone: params.timezone ?? this.config.defaultTimezone,
     };
   }
 

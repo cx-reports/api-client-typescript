@@ -11,6 +11,7 @@ let client = new CxReportsClient({
   baseUrl: process.env.BASE_URL,
   authToken: process.env.AUTH_TOKEN,
   defaultWorkspaceId: process.env.DEFAULT_WORKSPACE_ID,
+  defaultTimezone: new Intl.DateTimeFormat().resolvedOptions().timeZone,
 });
 
 try {

@@ -19,6 +19,7 @@ const client = new CxReportsClient({
   baseUrl: "[cx-reports-server-url]",
   authToken: "[your-personal-access-token]",
   defaultWorkspaceId: "[id or code of the workspace]",
+  defaultTimezone: "UTC"
 });
 
 // export a report to PDF
@@ -46,6 +47,8 @@ let url = client.getReportPreviewURL({
 });
 
 ```
+
+The current timezone of your server can be obtained using `new Intl.DateTimeFormat().resolvedOptions().timeZone`.
 
 ## Examples
 
