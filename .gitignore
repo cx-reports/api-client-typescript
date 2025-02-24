@@ -2,3 +2,5 @@
 /dist
 .env
 *.pdf
+.vscode
+.DS_Store
