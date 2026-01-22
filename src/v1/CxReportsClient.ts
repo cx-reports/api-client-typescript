@@ -5,6 +5,18 @@ import { ErrorData } from "./models/ErrorData.js";
 import { Workspace } from "./models/Workspace.js";
 import { NonceToken } from "./models/NonceToken.js";
 import { TemporaryData } from "./models/TemporaryData.js";
+import { TemporaryFileStatusResponse } from "./models/TemporaryFileStatusResponse.js";
+import { ReportType } from "./models/ReportType.js";
+import { ReportPage } from "./models/ReportPage.js";
+import { DocumentFileFormat } from "./models/DocumentFileFormat.js";
+import { ReportExportRequest } from "./models/ReportExportRequest.js";
+import { AsyncReportGenerationRequest } from "./models/AsyncReportGenerationRequest.js";
+import { AsyncReportGenerationResponse } from "./models/AsyncReportGenerationResponse.js";
+import { Job } from "./models/Job.js";
+import { JobRunRequest } from "./models/JobRunRequest.js";
+import { JobRun } from "./models/JobRun.js";
+import { JobRunStatus } from "./models/JobRunStatus.js";
+import { Report } from "./models/Report.js";
 
 export interface CxReportsClientConfig {
   baseUrl: string;
@@ -22,12 +34,23 @@ interface ReportIdParams {
   reportTypeCode?: string;
 }
 
+interface JobIdParams {
+  jobId?: number;
+  jobCode?: string;
+}
+
 interface ReportPreviewParams {
   params?: any;
   data?: any;
   tempDataId?: number;
   nonce?: string;
   timezone?: string;
+}
+
+interface ReportExportParams extends ReportPreviewParams {
+  lang?: string;
+  format?: DocumentFileFormat;
+  includeAttachments?: boolean;
 }
 
 export class CxReportsClient extends ApiClientBase {
@@ -47,7 +70,7 @@ export class CxReportsClient extends ApiClientBase {
   protected resolveEndpointURLWithApiPath(
     apiPath: string,
     endpointPath: string,
-    query?: any
+    query?: any,
   ): string {
     return buildUrl(this.config.baseUrl, apiPath, endpointPath, query);
   }
@@ -85,6 +108,15 @@ export class CxReportsClient extends ApiClientBase {
     );
   }
 
+  protected getJobId(params?: JobIdParams): string {
+    let jobId = params?.jobId?.toString() ?? params?.jobCode;
+    if (jobId == null)
+      throw new CxReportsError(
+        "Invalid job identification. Missing either jobId or jobCode.",
+      );
+    return jobId;
+  }
+
   public getReports(
     params?: WorkspaceIdParams & {
       query?: {
@@ -92,12 +124,22 @@ export class CxReportsClient extends ApiClientBase {
         offset?: number;
         limit?: number;
       };
-    }
+    },
   ): Promise<Report[]> {
     let workspaceId = this.getWorkspaceId(params);
     return this.get(
       `ws/${encodeURIComponent(workspaceId)}/reports`,
-      params?.query
+      params?.query,
+    );
+  }
+
+  public async getReportPages(
+    params: WorkspaceIdParams & ReportIdParams,
+  ): Promise<ReportPage[]> {
+    let workspaceId = this.getWorkspaceId(params);
+    let reportId = this.getReportId(params);
+    return this.get(
+      `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(reportId)}/pages`,
     );
   }
 
@@ -105,7 +147,7 @@ export class CxReportsClient extends ApiClientBase {
     let reportId = params?.reportId?.toString() ?? params?.reportTypeCode;
     if (reportId == null)
       throw new CxReportsError(
-        "Invalid report identification. Missing either reportId or reportType."
+        "Invalid report identification. Missing either reportId or reportType.",
       );
     return reportId;
   }
@@ -121,7 +163,7 @@ export class CxReportsClient extends ApiClientBase {
   }
 
   public getReportPreviewURL(
-    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams
+    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams,
   ): string {
     let workspaceId = this.getWorkspaceId(params);
     let reportId = this.getReportId(params);
@@ -129,14 +171,14 @@ export class CxReportsClient extends ApiClientBase {
     return this.resolveEndpointURLWithApiPath(
       "/", // no api path for this endpoint
       `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(
-        reportId
+        reportId,
       )}/preview`,
-      query
+      query,
     );
   }
 
   public getReportPdfDownloadURL(
-    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams
+    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams,
   ): string {
     let workspaceId = this.getWorkspaceId(params);
     let reportId = this.getReportId(params);
@@ -144,25 +186,72 @@ export class CxReportsClient extends ApiClientBase {
 
     return this.resolveEndpointURL(
       `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(
-        reportId
+        reportId,
       )}/pdf`,
-      query
+      query,
     );
   }
 
   public async downloadPDF(
-    params: WorkspaceIdParams & ReportIdParams & ReportPreviewParams
+    params: WorkspaceIdParams & ReportIdParams & ReportExportParams,
   ): Promise<Response> {
+    params = {
+      ...params,
+      format: params.format ?? DocumentFileFormat.pdf,
+      includeAttachments: params.includeAttachments ?? false,
+    };
     let workspaceId = this.getWorkspaceId(params);
     let reportId = this.getReportId(params);
+
     let query = this.encodeReportPreviewParams(params);
 
     return this.doFetch(
       `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(
-        reportId
+        reportId,
       )}/pdf`,
       { method: "GET" },
-      query
+      query,
+    );
+  }
+
+  public async downloadPDFWithData(
+    params: WorkspaceIdParams & ReportIdParams & { body: ReportExportRequest },
+  ): Promise<Response> {
+    const workspaceId = this.getWorkspaceId(params);
+    const reportId = this.getReportId(params);
+    params.body = {
+      ...params.body,
+      format: params.body.format ?? DocumentFileFormat.pdf,
+      includeAttachments: params.body.includeAttachments ?? false,
+    };
+    return this.doFetch(
+      `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(reportId)}/pdf`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params.body),
+      },
+    );
+  }
+
+  public async startAsyncExport(
+    params: WorkspaceIdParams &
+      ReportIdParams & { body: AsyncReportGenerationRequest },
+  ): Promise<AsyncReportGenerationResponse> {
+    const workspaceId = this.getWorkspaceId(params);
+    const reportId = this.getReportId(params);
+    params.body = {
+      ...params.body,
+      format: params.body.format ?? DocumentFileFormat.pdf,
+      includeAttachments: params.body.includeAttachments ?? false,
+    };
+    return this.post(
+      `ws/${encodeURIComponent(workspaceId)}/reports/${encodeURIComponent(reportId)}/export`,
+      {
+        data: params.body,
+      },
     );
   }
 
@@ -178,7 +267,7 @@ export class CxReportsClient extends ApiClientBase {
     params: WorkspaceIdParams & {
       content: any;
       expires?: Date;
-    }
+    },
   ): Promise<TemporaryData> {
     let workspaceId = this.getWorkspaceId(params);
 
@@ -188,5 +277,82 @@ export class CxReportsClient extends ApiClientBase {
         expiryDate: params?.expires?.toISOString(),
       },
     });
+  }
+
+  public getExportStatus(
+    params: WorkspaceIdParams & { tempFileId: number },
+  ): Promise<TemporaryFileStatusResponse> {
+    let workspaceId = this.getWorkspaceId(params);
+    return this.get(
+      `ws/${encodeURIComponent(workspaceId)}/exports/${encodeURIComponent(params.tempFileId)}/status`,
+    );
+  }
+
+  public getExportContent(
+    params: WorkspaceIdParams & { tempFileId: number },
+  ): Promise<Response> {
+    let workspaceId = this.getWorkspaceId(params);
+
+    return this.doFetch(
+      `ws/${encodeURIComponent(workspaceId)}/exports/${encodeURIComponent(
+        params.tempFileId,
+      )}/content`,
+      { method: "GET" },
+    );
+  }
+
+  public getReportTypes(params: WorkspaceIdParams): Promise<ReportType[]> {
+    let workspaceId = this.getWorkspaceId(params);
+    return this.get(`ws/${encodeURIComponent(workspaceId)}/report-types`);
+  }
+
+  public getJobs(params: WorkspaceIdParams): Promise<Job[]> {
+    let workspaceId = this.getWorkspaceId(params);
+    return this.get(`ws/${encodeURIComponent(workspaceId)}/jobs`);
+  }
+
+  public startNewJobRun(
+    params: WorkspaceIdParams & JobIdParams & { body: JobRunRequest },
+  ): Promise<JobRun> {
+    let workspaceId = this.getWorkspaceId(params);
+    let jobId = this.getJobId(params);
+    return this.post(
+      `ws/${encodeURIComponent(workspaceId)}/jobs/${encodeURIComponent(jobId)}/runs`,
+      {
+        data: params.body,
+      },
+    );
+  }
+
+  public getJobRunStatus(
+    params: WorkspaceIdParams & JobIdParams & { jobRunId: number },
+  ): Promise<JobRunStatus> {
+    let workspaceId = this.getWorkspaceId(params);
+    let jobId = this.getJobId(params);
+
+    return this.get(
+      `ws/${encodeURIComponent(workspaceId)}/jobs/${encodeURIComponent(jobId)}/runs/${params.jobRunId}/status`,
+    );
+  }
+
+  public getReviewDocument(
+    params: WorkspaceIdParams & JobIdParams & { jobRunId: number },
+  ): Promise<AsyncReportGenerationResponse> {
+    let workspaceId = this.getWorkspaceId(params);
+    let jobId = this.getJobId(params);
+    return this.post(
+      `ws/${encodeURIComponent(workspaceId)}/jobs/${encodeURIComponent(jobId)}/runs/${params.jobRunId}/generate-review-document`,
+    );
+  }
+
+  public deliverAllEntriesForJobRun(
+    params: WorkspaceIdParams & JobIdParams & { jobRunId: number },
+  ): Promise<Response> {
+    let workspaceId = this.getWorkspaceId(params);
+    let jobId = this.getJobId(params);
+    return this.doFetch(
+      `ws/${encodeURIComponent(workspaceId)}/jobs/${encodeURIComponent(jobId)}/runs/${params.jobRunId}/deliver`,
+      { method: "POST" },
+    );
   }
 }
