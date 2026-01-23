@@ -152,13 +152,19 @@ export class CxReportsClient extends ApiClientBase {
     return reportId;
   }
 
-  protected encodeReportPreviewParams(params: ReportPreviewParams): any {
+  protected encodeReportPreviewParams<T extends ReportPreviewParams>(
+    params: T,
+  ): Record<string, any> {
     return {
       params: params.params ? JSON.stringify(params.params) : null,
       data: params.data ? JSON.stringify(params.data) : null,
       nonce: params.nonce,
       tempDataId: params.tempDataId,
       timezone: params.timezone ?? this.config.defaultTimezone,
+      lang: "lang" in params ? params.lang : null,
+      format: "format" in params ? params.format : null,
+      includeAttachments:
+        "includeAttachments" in params ? params.includeAttachments : undefined,
     };
   }
 
