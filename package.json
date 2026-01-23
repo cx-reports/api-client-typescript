@@ -16,7 +16,14 @@
     "test": "jest",
     "example:fetch-reports": "tsx examples/fetch-reports.ts",
     "example:build-preview-url": "tsx examples/build-preview-url.ts",
-    "example:download-pdf": "tsx examples/download-pdf.ts"
+    "example:download-pdf": "tsx examples/download-pdf.ts",
+    "example:async-export-report": "tsx examples/async-export-report.ts",
+    "example:check-job-run-status": "tsx examples/check-job-run-status.ts",
+    "example:fetch-jobs": "tsx examples/fetch-jobs.ts",
+    "example:fetch-report-pages": "tsx examples/fetch-report-pages.ts",
+    "example:fetch-report-types": "tsx examples/fetch-report-types.ts",
+    "example:nonce-token": "tsx examples/nonce-token.ts",
+    "example:start-job-run": "tsx examples/start-job-run.ts"
   },
   "repository": {
     "type": "git",
