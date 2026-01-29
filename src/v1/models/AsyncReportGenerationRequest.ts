@@ -1,8 +1,8 @@
 import { DocumentFileFormat } from "./DocumentFileFormat";
 
 export interface AsyncReportGenerationRequest {
-  params?: any;
-  data?: any;
+  params?: Record<string, any>;
+  data?: Record<string, any>;
   lang?: string;
   timezone?: string;
   format: DocumentFileFormat;

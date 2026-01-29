@@ -1,4 +1,4 @@
 export interface JobRunRequest {
-  params?: any;
-  data?: any;
+  params?: Record<string, any>;
+  data?: Record<string, any>;
 }

@@ -40,8 +40,8 @@ interface JobIdParams {
 }
 
 interface ReportPreviewParams {
-  params?: any;
-  data?: any;
+  params?: Record<string, any>;
+  data?: Record<string, any>;
   tempDataId?: number;
   nonce?: string;
   timezone?: string;
