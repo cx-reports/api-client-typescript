@@ -139,6 +139,67 @@ describe("CxReportsClient", () => {
     );
   });
 
+  test("getThemes resolves the correct endpoint url", async () => {
+    let client = new CxReportsClient({
+      baseUrl: "http://example.com",
+      authToken: "token",
+      defaultWorkspaceId: "test",
+    });
+    fetchResult = [{ id: 1, code: "default", name: "Default" }];
+    let _ = await client.getThemes();
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://example.com/api/v1/ws/test/themes",
+      expect.anything(),
+    );
+  });
+
+  test("getReportTemplates resolves the correct endpoint url", async () => {
+    let client = new CxReportsClient({
+      baseUrl: "http://example.com",
+      authToken: "token",
+      defaultWorkspaceId: "test",
+    });
+    fetchResult = [{ id: 1, code: "standard", name: "Standard" }];
+    let _ = await client.getReportTemplates();
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://example.com/api/v1/ws/test/templates",
+      expect.anything(),
+    );
+  });
+
+  test("getThemes throws if workspace id is not set", () => {
+    let client = new CxReportsClient({
+      baseUrl: "http://example.com",
+      authToken: "token",
+    });
+    let invoke = () => client.getThemes();
+    expect(invoke).toThrow(MissingWorkspaceIdError);
+  });
+
+  test("getReportTemplates throws if workspace id is not set", () => {
+    let client = new CxReportsClient({
+      baseUrl: "http://example.com",
+      authToken: "token",
+    });
+    let invoke = () => client.getReportTemplates();
+    expect(invoke).toThrow(MissingWorkspaceIdError);
+  });
+
+  test("getReportPdfDownloadURL includes theme and template in query when provided", () => {
+    let client = new CxReportsClient({
+      baseUrl: "http://example.com",
+      authToken: "token",
+      defaultWorkspaceId: "test",
+    });
+    let url = client.getReportPdfDownloadURL({
+      reportId: 1,
+      theme: "dark",
+      template: "compact",
+    });
+    expect(url).toContain("theme=dark");
+    expect(url).toContain("template=compact");
+  });
+
   test("createNonceAuthToken resolves the correct endpoint url", async () => {
     let client = new CxReportsClient({
       baseUrl: "http://example.com",

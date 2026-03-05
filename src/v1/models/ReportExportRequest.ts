@@ -7,4 +7,6 @@ export interface ReportExportRequest {
   timezone?: string;
   format?: DocumentFileFormat;
   includeAttachments?: boolean;
+  theme?: string;
+  template?: string;
 }

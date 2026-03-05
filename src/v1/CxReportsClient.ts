@@ -17,6 +17,8 @@ import { JobRunRequest } from "./models/JobRunRequest.js";
 import { JobRun } from "./models/JobRun.js";
 import { JobRunStatus } from "./models/JobRunStatus.js";
 import { Report } from "./models/Report.js";
+import { Theme } from "./models/Theme.js";
+import { ReportTemplate } from "./models/ReportTemplate.js";
 
 export interface CxReportsClientConfig {
   baseUrl: string;
@@ -45,6 +47,8 @@ interface ReportPreviewParams {
   tempDataId?: number;
   nonce?: string;
   timezone?: string;
+  theme?: string;
+  template?: string;
 }
 
 interface ReportExportParams extends ReportPreviewParams {
@@ -165,6 +169,8 @@ export class CxReportsClient extends ApiClientBase {
       format: "format" in params ? params.format : null,
       includeAttachments:
         "includeAttachments" in params ? params.includeAttachments : undefined,
+      theme: params.theme,
+      template: params.template,
     };
   }
 
@@ -263,6 +269,20 @@ export class CxReportsClient extends ApiClientBase {
 
   public getWorkspaces(): Promise<Workspace[]> {
     return this.get("workspaces");
+  }
+
+  public getThemes(
+    params?: WorkspaceIdParams,
+  ): Promise<Theme[]> {
+    let workspaceId = this.getWorkspaceId(params);
+    return this.get(`ws/${encodeURIComponent(workspaceId)}/themes`);
+  }
+
+  public getReportTemplates(
+    params?: WorkspaceIdParams,
+  ): Promise<ReportTemplate[]> {
+    let workspaceId = this.getWorkspaceId(params);
+    return this.get(`ws/${encodeURIComponent(workspaceId)}/templates`);
   }
 
   public createNonceAuthToken(): Promise<NonceToken> {

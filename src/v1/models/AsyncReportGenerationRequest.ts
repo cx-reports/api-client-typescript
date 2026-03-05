@@ -9,4 +9,6 @@ export interface AsyncReportGenerationRequest {
   includeAttachments: boolean;
   excludePages?: number[];
   tempDataId?: number;
+  theme?: string;
+  template?: string;
 }
