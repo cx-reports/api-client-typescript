@@ -1,7 +1,7 @@
 export enum DocumentFileFormat {
-  pdf,
-  docx,
-  xlsx,
-  pptx,
-  html,
+  pdf = "pdf",
+  docx = "docx",
+  xlsx = "xlsx",
+  pptx = "pptx",
+  html = "html",
 }

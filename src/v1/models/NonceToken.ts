@@ -1,3 +1,3 @@
 export interface NonceToken {
-  nonce: string;
+  nonce?: string;
 }

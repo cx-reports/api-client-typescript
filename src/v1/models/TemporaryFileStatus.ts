@@ -1,5 +1,5 @@
 export enum TemporaryFileStatus {
-  InProgress,
-  Completed,
-  Failed,
+  InProgress = "InProgress",
+  Completed = "Completed",
+  Failed = "Failed",
 }
