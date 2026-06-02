@@ -4,7 +4,11 @@ import { CxReportsClient } from "../src/v1/CxReportsClient.js";
 
 config();
 
-if (!process.env.BASE_URL || !process.env.AUTH_TOKEN)
+if (
+  !process.env.BASE_URL ||
+  !process.env.AUTH_TOKEN ||
+  !process.env.DEFAULT_REPORT_ID
+)
   throw new Error("Missing required environment variables");
 
 let client = new CxReportsClient({
@@ -15,6 +19,7 @@ let client = new CxReportsClient({
 });
 
 try {
+  let reportId = parseInt(process.env.DEFAULT_REPORT_ID);
   let { nonce } = await client.createNonceAuthToken();
   console.log("NONCE", nonce);
 
@@ -24,7 +29,7 @@ try {
   console.table(tempDataId);
 
   let previewUrl = client.getReportPreviewURL({
-    reportId: 18620,
+    reportId: reportId,
     nonce,
     tempDataId,
     //params: { abc: "test" },
