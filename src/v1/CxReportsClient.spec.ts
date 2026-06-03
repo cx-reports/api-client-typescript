@@ -527,26 +527,30 @@ describe("CxReportsClient", () => {
   });
 });
 
-describe("CxReportsClient - Integration Tests with Real Environment Variables", () => {
+const hasIntegrationEnv = Boolean(
+  process.env.BASE_URL && process.env.AUTH_TOKEN,
+);
+
+if (!hasIntegrationEnv) {
+  console.warn(
+    "Skipping integration tests: Missing BASE_URL or AUTH_TOKEN in environment",
+  );
+}
+
+// Only run this block when real credentials are present; otherwise skip
+// (instead of running against an undefined client and failing).
+const describeIntegration = hasIntegrationEnv ? describe : describe.skip;
+
+describeIntegration("CxReportsClient - Integration Tests with Real Environment Variables", () => {
   let client: CxReportsClient;
 
-  beforeAll(() => {
-    if (!process.env.BASE_URL || !process.env.AUTH_TOKEN) {
-      console.warn(
-        "Skipping integration tests: Missing BASE_URL or AUTH_TOKEN in environment",
-      );
-    }
-  });
-
   beforeEach(() => {
-    if (process.env.BASE_URL && process.env.AUTH_TOKEN) {
-      client = new CxReportsClient({
-        baseUrl: process.env.BASE_URL,
-        authToken: process.env.AUTH_TOKEN,
-        defaultWorkspaceId: process.env.DEFAULT_WORKSPACE_ID,
-        defaultTimezone: "UTC",
-      });
-    }
+    client = new CxReportsClient({
+      baseUrl: process.env.BASE_URL!,
+      authToken: process.env.AUTH_TOKEN!,
+      defaultWorkspaceId: process.env.DEFAULT_WORKSPACE_ID,
+      defaultTimezone: "UTC",
+    });
   });
 
   test("should be able to create client with environment variables", () => {
